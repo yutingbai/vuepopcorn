@@ -7,6 +7,7 @@
             </div>					
         </div>
         <div class="search_result">
+            <div class="movies_content">
             <h3>电影/电视剧/综艺</h3>
             <ul>
                 <li v-for="item in moviesList" :key="item.id">
@@ -19,7 +20,24 @@
                     </div>
                 </li>
             </ul>
-			
+            </div>
+            <div class="cinemas_content">
+            <h3>影院/演出厅</h3>
+            <ul>
+                <p>
+            <li v-for="item in cinemaList" :key="item.id">
+                <div>
+                    <p class="name">{{ item.nm }}</p>
+                    <p class="q"><span class="price">{{ item.sellPrice }}</span> 元起</p>
+                </div>
+                <p>
+                <div class="address">
+                    <span>{{ item.addr }}</span>
+                    <span>{{ item.distance }}</span>
+                </div>
+            </li>
+        </ul>
+            </div>
         </div>
     </div>
 </template>
@@ -30,12 +48,12 @@ export default {
     data(){
         return {
             message : '',
-			moviesList : [],
-			cinemaList : []
+            moviesList : [],
+            cinemaList : []
         }
     },
     methods : {
-         cancelRequest(){
+        cancelRequest(){
             if(typeof this.source ==='function'){
                 this.source('终止请求')
             }
@@ -44,9 +62,9 @@ export default {
     watch : {
         message(newVal){
             var that = this;
-            // var cityId = this.$store.state.city.id;
+            var cityId = this.$store.state.city.id;
             this.cancelRequest();
-            this.axios.get('/api/searchList?cityId=42&kw='+newVal,{
+            this.axios.get('/api/searchList?cityId='+ cityId +'&kw='+newVal,{
                 cancelToken: new this.axios.CancelToken(function(c){
                     that.source = c;
                 })
@@ -54,7 +72,9 @@ export default {
                 var msg = res.data.msg;
                 var movies = res.data.data.movies;
                 if(msg && movies){
+                    console.log(res.data)
                     this.moviesList = res.data.data.movies.list;
+                    this.cinemaList = res.data.data.cinemas.list;
                 }
             }).catch((err) => {
                 if (this.axios.isCancel(err)) {
@@ -75,14 +95,19 @@ export default {
 .search_body .search_input_wrapper{ padding: 0 10px; border: 1px solid #e6e6e6; border-radius: 5px; background-color: #fff; display: flex; line-height: 20px;}
 .search_body .search_input_wrapper i{font-size: 16px; padding: 4px 0;}
 .search_body .search_input_wrapper input{ border: none; font-size: 13px; color: #333; padding: 4px 0; outline: none; margin-left: 5px; width:100%;}
-.search_body .search_result h3{ font-size: 15px; color: #999; padding: 9px 15px; border-bottom: 1px solid #e6e6e6;}
-.search_body .search_result li{ border-bottom:1px #c9c9c9 dashed; padding: 10px 15px; box-sizing:border-box; display: flex;}
-.search_body .search_result .img{ width: 60px; float:left; }
-.search_body .search_result .img img{ width: 100%; }
-.search_body .search_result .info{ float:left; margin-left: 15px; flex:1;}
-.search_body .search_result .info p{ height: 22px; display: flex; line-height: 22px; font-size: 12px;}
-.search_body .search_result .info p:nth-of-type(1) span:nth-of-type(1){ font-size: 18px; flex:1; }
-.search_body .search_result .info p:nth-of-type(1) span:nth-of-type(2){ font-size: 16px; color:#fc7103;}
+.search_body .search_result  h3{ font-size: 15px; color: #999; padding: 9px 15px; border-bottom: 1px solid #e6e6e6;}
+.search_body .search_result .movies_content li{ border-bottom:1px #c9c9c9 dashed; padding: 10px 15px; box-sizing:border-box; display: flex;}
+.search_body .search_result .movies_content .img{ width: 60px; float:left; }
+.search_body .search_result .movies_content .img img{ width: 100%; }
+.search_body .search_result .movies_content .info{ float:left; margin-left: 15px; flex:1;}
+.search_body .search_result .movies_content .info p{ height: 22px; display: flex; line-height: 22px; font-size: 12px;}
+.search_body .search_result .movies_content .info p:nth-of-type(1) span:nth-of-type(1){ font-size: 18px; flex:1; }
+.search_body .search_result .movies_content .info p:nth-of-type(1) span:nth-of-type(2){ font-size: 16px; color:#fc7103;}
 
-
+.search_body .search_result .cinemas_content li{  border-bottom:1px #c9c9c9 dashed; margin-bottom: 20px; padding: 15px;}
+.search_body .search_result .cinemas_content div{ margin-bottom: 10px;}
+.search_body .search_result .cinemas_content .q{ font-size: 11px; color:#f03d37;}
+.search_body .search_result .cinemas_content .price{ font-size: 15px;}
+.search_body .search_result .cinemas_content .address{ font-size: 13px; color:#666;}
+.search_body .search_result .cinemas_content .address span:nth-of-type(2){ float:right; }
 </style>
