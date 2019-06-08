@@ -1,7 +1,9 @@
 <template>
     <div class="cinema_body">
-            <ul>
-                <li v-for="item in cinemaList" :key="item.id">
+        <Loading v-if="isLoading" />
+        <Scroller v-else>
+        <ul>
+            <li v-for="item in cinemaList" :key="item.id">
                 <div>
                     <span>{{ item.nm }}</span>
                     <span class="q"><span class="price">{{ item.sellPrice }}</span> 元起</span>
@@ -11,34 +13,37 @@
                     <span>{{ item.distance }}</span>
                 </div>
                 <div class="card">
-                    <div v-for="(num,key) in item.tag" v-if="num===1" :key="key" :class=" key | classCard ">{{ key | formatCard }}</div>
+                    <div v-for="(num,key) in item.tag" v-show="num===1" :key="key" :class=" key | classCard ">{{ key | formatCard }}</div>
                 </div>
             </li>
-            </ul>
-		</div>
+        </ul>
+        </Scroller>
+    </div>
 </template>
 
 <script>
 export default {
-     name : 'CiList',
+    name : 'CiList',
     data(){
         return {
             cinemaList : [],
-            // prevCityId : -1
+            isLoading : true,
+            prevCityId : -1
         };
     },
     activated(){
 
-        // var cityId = this.$store.state.city.id;
-        // if( this.prevCityId === cityId ){ return; }
-        // this.isLoading = true;
+        var cityId = this.$store.state.city.id;
+        if( this.prevCityId === cityId ){ return; }
+        this.isLoading = true;
 
-        this.axios.get('/api/cinemaList?cityId=10').then((res)=>{
+        this.axios.get('/api/cinemaList?cityId='+cityId).then((res)=>{
             var msg = res.data.msg;
             if(msg === 'ok'){
+                console.log(res.data.data)
                 this.cinemaList = res.data.data.cinemas;
-                // this.isLoading = false;
-                // this.prevCityId = cityId
+                this.isLoading = false;
+                this.prevCityId = cityId
             }
         });
     },
@@ -72,11 +77,10 @@ export default {
             return '';
         }
     }
-
 }
 </script>
 
-<style>
+<style scoped>
 #content .cinema_body{ flex:1; overflow:auto;}
 .cinema_body ul{ padding:20px;}
 .cinema_body li{  border-bottom:1px solid #e6e6e6; margin-bottom: 20px;}
@@ -89,5 +93,4 @@ export default {
 .cinema_body .card div{ padding: 0 3px; height: 15px; line-height: 15px; border-radius: 2px; color: #f90; border: 1px solid #f90; font-size: 13px; margin-right: 5px;}
 .cinema_body .card div.or{ color: #f90; border: 1px solid #f90;}
 .cinema_body .card div.bl{ color: #589daf; border: 1px solid #589daf;}
-
 </style>
