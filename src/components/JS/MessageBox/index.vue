@@ -1,6 +1,6 @@
 <template>
     <div class="messageBox">
-        <h2>{{ title }}</h2>
+        <h3>{{ title }}</h3>
         <p>{{ content }}</p>
         <div>
             <div v-if="cancel" @touchstart="handleCancel">{{ cancel }}</div>
@@ -16,8 +16,8 @@ export default {
 </script>
 
 <style scoped>
-    .messageBox{ width:200px; height:120px; border:1px #ccc solid; border-radius: 10px; background:#fff; opacity: 0.8; box-shadow: 3px 3px 3px 3px #ccc; position: absolute; left: 50%; top: 50%; margin:-60px 0 0 -100px;}
-    .messageBox h2{ text-align: center; line-height: 40px; font-size: 18px;}
+    .messageBox{z-index:100;  width:200px; height:120px; border:1px #ccc solid; border-radius: 10px; background:#fff; opacity: 0.8; box-shadow: 3px 3px 3px 3px #ccc; position: absolute; left: 50%; top: 50%; margin:-60px 0 0 -100px;}
+    .messageBox h3{ text-align: center; line-height: 40px; font-size: 18px;font-weight: normal}
     .messageBox p{ text-align: center; line-height:40px;}
     .messageBox > div{ display: flex; position: absolute; bottom: 0; width:100%; border-top:1px #ccc solid;}
     .messageBox > div div{ flex:1; text-align: center; line-height: 30px; border-right:1px #ccc solid;}

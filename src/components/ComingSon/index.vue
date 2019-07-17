@@ -1,9 +1,9 @@
 <template>
     <div class="movie_body">
-        <Loading v-if="isLoading"/>
+        <Loading v-if="isLoading" />
         <Scroller v-else>
-				<ul>
-				 <li v-for="item in comingList" :key="item.id">
+            <ul>
+                <li v-for="item in comingList" :key="item.id">
                     <div class="pic_show" @tap="handleToDetail(item.id)"><img :src="item.img | setWH('128.180')"></div>
                     <div class="info_list">
                         <h2 @tap="handleToDetail(item.id)">{{ item.nm }} <img v-if="item.version" src="@/assets/maxs.png" alt=""></h2>
@@ -12,39 +12,42 @@
                         <p>{{ item.rt }}上映</p>
                     </div>
                     <div class="btn_pre">
-                        预售
+                        未开放购票
                     </div>
                 </li>
-				</ul>
+            </ul>
         </Scroller>
-			</div>
+    </div>
 </template>
 
 <script>
 export default {
-	name:"ComingSon",
-	 data(){
+    name : 'ComingSoon',
+    data(){
         return {
             comingList : [],
-            isLoading: true
+            isLoading : true,
+            prevCityId : -1
         };
-	},
-	activated(){
+    },
+    activated(){
+
         var cityId = this.$store.state.city.id;
-        console.log(cityId)
         if( this.prevCityId === cityId ){ return; }
         this.isLoading = true;
-        this.axios.get('/api/movieComingList?cityId=42').then((res)=>{
+        this.axios.get('/api/movieComingList?cityId='+cityId).then((res)=>{
             var msg = res.data.msg;
-            console.log(res.data.data.comingList)
             if(msg === 'ok'){
-                 this.comingList = res.data.data.comingList;
-                 console.log('over')
-                 this.isLoading = false;
-                 this.prevCityId = cityId;
-
+                this.comingList = res.data.data.comingList;
+                this.isLoading = false;
+                this.prevCityId = cityId;
             }
         })
+    },
+    methods : {
+        handleToDetail(movieId){
+            this.$router.push('/movie/detail/2/' + movieId);
+        }
     }
 }
 </script>
@@ -61,5 +64,5 @@ export default {
 .movie_body .info_list .grade{ font-weight: 700; color: #faaf00; font-size: 15px;}
 .movie_body .info_list img{ width:50px; position: absolute; right:10px; top: 5px;}
 .movie_body .btn_mall , .movie_body .btn_pre{ width:47px; height:27px; line-height: 28px; text-align: center; background-color: #f03d37; color: #fff; border-radius: 4px; font-size: 12px; cursor: pointer;}
-.movie_body .btn_pre{ background-color: #3c9fe6;}
+.movie_body .btn_pre{ background-color: #ccc;}
 </style>

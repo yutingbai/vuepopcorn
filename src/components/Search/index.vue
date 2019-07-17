@@ -33,7 +33,7 @@
                 <p>
                 <div class="address">
                     <span>{{ item.addr }}</span>
-                    <span>{{ item.distance }}</span>
+                    <!-- <span>{{ item.distance }}</span> -->
                 </div>
             </li>
         </ul>

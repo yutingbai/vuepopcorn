@@ -49,9 +49,12 @@ export default {
             this.isLoading = false;
         }else{
             this.axios.get('/api/cityList').then((res)=>{
-			var msg = res.data.msg
-			if(msg === 'ok' ){
+            var msg = res.data.msg
+             console.log(msg)
+			if(msg == 'ok'){
+                    console.log(res.data)
                     var cities = res.data.data.cities;
+                    // console.log(cities)
                     this.isLoading = false;
                     var { cityList , hotList } = this.formatCityList(cities);
                     this.cityList = cityList;
@@ -108,8 +111,8 @@ export default {
                 }
                 return true;
             }
-			console.log(cityList)
-			console.log(hotList)
+			// console.log(cityList)
+			// console.log(hotList)
             return {
                 cityList,
                 hotList
