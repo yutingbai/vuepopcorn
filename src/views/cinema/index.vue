@@ -16,6 +16,8 @@
                 <CiList />
             </div>
         <TabBar/>
+        <router-view name='ciInfo'>
+        </router-view>
     </div>
 </template>
 

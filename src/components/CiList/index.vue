@@ -4,7 +4,7 @@
         <Scroller v-else>
         <ul>
             <li v-for="item in cinemaList" :key="item.id">
-                <div>
+                <div  @tap="handleTocinema(item.id)">
                     <span>{{ item.nm }}</span>
                     <span class="q"><span class="price">{{ item.sellPrice }}</span> 元起</span>
                 </div>
@@ -36,16 +36,23 @@ export default {
         var cityId = this.$store.state.city.id;
         if( this.prevCityId === cityId ){ return; }
         this.isLoading = true;
-
-        this.axios.get('/api/cinemaList?cityId='+cityId).then((res)=>{
-            var msg = res.data.msg;
-            if(msg === 'ok'){
-                console.log(res.data.data)
-                this.cinemaList = res.data.data.cinemas;
+        let data = {'req':cityId};
+        this.axios.post('http://localhost:8081/admin/cinemaFindByCity',data).then((res)=>{
+            // console.log(res.data)
+            var msg = res.data.code;
+            if(msg == 0){
+                // console.log(res.data.message)
+                this.cinemaList = res.data.message;
                 this.isLoading = false;
                 this.prevCityId = cityId
             }
         });
+    },  
+    methods:{
+        handleTocinema(cinemaId){
+        // console.log(cinemaId);
+        this.$router.push('/cinema/ciInfo/' + cinemaId);
+        }
     },
     filters : {
         formatCard(key){

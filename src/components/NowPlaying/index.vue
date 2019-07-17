@@ -12,8 +12,8 @@
                     <p>主演: {{ item.star }}</p>
                     <p>{{ item.showInfo }}</p>
                 </div>
-                <div class="btn_mall">
-                    购票
+                <div class="btn_mall"  @tap="handleToDetail(item.id)" >
+                    详情
                 </div>
             </li>
             </ul>
@@ -120,6 +120,7 @@ export default {
     .movie_body .info_list img{ width:50px; position: absolute; right:10px; top: 5px;}
     .movie_body .btn_mall , .movie_body .btn_pre{ width:47px; height:27px; line-height: 28px; text-align: center; background-color: #f03d37; color: #fff; border-radius: 4px; font-size: 12px; cursor: pointer;}
     .movie_body .btn_pre{ background-color: #3c9fe6;}
+     .movie_body .btn_mall {background-color: #faaf00}
     .movie_body .pullDown{ margin:0; padding:0; border:none;}
 
 </style>
